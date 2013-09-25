@@ -23,6 +23,7 @@ import os
 
 version = pkg_resources.require("bamcover")[0].version
 
+
 def parse_args():
     parser = ArgumentParser(description="Generate coverage information for BAM files")
     parser.add_argument(
@@ -35,6 +36,7 @@ def parse_args():
         help='Log progress in FILENAME, defaults to stdout.')
     return parser.parse_args() 
 
+
 def get_coords(coords_filename):
     result = []
     with open(coords_filename) as file:
@@ -46,9 +48,11 @@ def get_coords(coords_filename):
                     result.append((chr, int(start), int(end)))
     return result
 
+
 def bam_name_legend(bam_filename):
     basename = os.path.basename(bam_filename)
     return basename[:10]
+
 
 def plot_coverage(coords, bams):
     coords = get_coords(coords)
@@ -86,21 +90,23 @@ def end_graph(filename):
     plt.savefig(filename)
     plt.close()
 
-
-def main():
-    args = parse_args()
-    if args.log is None:
+def start_log(log):
+    if log is None:
         logfile = sys.stdout
     else:
-        logfile = args.log
+        logfile = log
     logging.basicConfig(
-        filename=args.log,
+        filename=log,
         level=logging.DEBUG,
         filemode='w',
         format='%(asctime)s %(message)s',
         datefmt='%m/%d/%Y %H:%M:%S')
     logging.info('program started')
     logging.info('command line: {0}'.format(' '.join(sys.argv)))
+
+def main():
+    args = parse_args()
+    start_log(args.log)
     plot_coverage(args.coords, args.bams)
 
 
