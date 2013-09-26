@@ -36,10 +36,8 @@ positional arguments:
 optional arguments:
   -h, --help       show this help message and exit
   --version        show program's version number and exit
-  --coords COORDS  DNA coordinates to generate coverage for
-  --log FILE       Log progress in FILENAME, defaults to stdout.
-
-Explanation of the arguments:
+  --coords COORDS  TSV coordinates file (1-based) for region of interest
+  --log FILE       Log progress in FILENAME.
 
 
 --------------------------------------------------------------------------------
@@ -47,6 +45,5 @@ Example usage (should be all on one line)
 --------------------------------------------------------------------------------
 
 bamcover --coords coords.tsv --log logfile *.bam
-
 
 --------------------------------------------------------------------------------
