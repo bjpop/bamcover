@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 '''
+###############################################################################
+
 Bam Coverage
 
 A program for generating coverage information for BAM sequence
@@ -8,7 +10,20 @@ alignment files.
 Author: Bernie Pope (bjpope@unimelb.edu.au)
 Licence: BSD
 
-Usage: 
+usage: bamcover [-h] [--version] --coords COORDS [--log FILE] bams [bams ...]
+
+Generate coverage information for BAM files
+
+positional arguments:
+  bams             bam files containing mapped reads
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --version        show program's version number and exit
+  --coords COORDS  DNA coordinates to generate coverage for
+  --log FILE       Log progress in FILENAME, defaults to stdout.
+
+###############################################################################
 '''
 
 from argparse import ArgumentParser
@@ -21,20 +36,25 @@ import pkg_resources
 import matplotlib.pyplot as plt
 import os
 
+
 version = pkg_resources.require("bamcover")[0].version
 
 
 def parse_args():
-    parser = ArgumentParser(description="Generate coverage information for BAM files")
+    parser = ArgumentParser(
+        description="Generate coverage information for BAM files")
     parser.add_argument(
-    '--version', action='version', version='%(prog)s ' + version)
+        '--version', action='version', version='%(prog)s ' + version)
     parser.add_argument(
-    '--coords', required=True, type=str, help='DNA coordinates to generate coverage for')
+        '--coords', required=True, type=str,
+        help='DNA coordinates to generate coverage for')
     parser.add_argument(
-        'bams', nargs='+', type=str, help='bam files containing mapped reads')
-    parser.add_argument( '--log', metavar='FILE', type=str,
+        'bams', nargs='+', type=str,
+        help='bam files containing mapped reads')
+    parser.add_argument(
+        '--log', metavar='FILE', type=str,
         help='Log progress in FILENAME, defaults to stdout.')
-    return parser.parse_args() 
+    return parser.parse_args()
 
 
 def get_coords(coords_filename):
@@ -57,6 +77,7 @@ def bam_name_legend(bam_filename):
 def plot_coverage(coords, bams):
     coords = get_coords(coords)
     for chr, start, end in coords:
+        logging.info("processing coord {} {} {}".format(chr, start, end))
         graph_filename = start_graph(chr, start, end)
         coords_range = range(start, end+1)
         for bam_filename in bams:
@@ -69,17 +90,19 @@ def plot_coverage(coords, bams):
                         first_pos = read.positions[0]
                         last_pos = read.positions[-1]
                         interval_tree.add(first_pos, last_pos, None)
-            counts = [len(interval_tree.find(pos, pos)) for pos in coords_range]
-            plot_graph(counts, coords_range, bam_name_legend(bam_filename))
+            counts = [len(interval_tree.find(pos, pos))
+                      for pos in coords_range]
+            legend_text = bam_name_legend(bam_filename)
+            plot_graph(counts, coords_range, legend_text)
         end_graph(graph_filename)
-            
+
 
 def start_graph(chr, start, end):
     plt.ylabel("Coverage")
     plt.xlabel("Position")
     plt.title("Read alignment coverage\n{}:{}-{}".format(chr, start, end))
     return "{}.{}.{}.png".format(chr, start, end)
-            
+
 
 def plot_graph(counts, coords_range, bam_num):
     plt.plot(coords_range, counts, label=bam_num)
@@ -89,6 +112,7 @@ def end_graph(filename):
     plt.legend(title="Sample")
     plt.savefig(filename)
     plt.close()
+
 
 def start_log(log):
     if log is None:
@@ -103,6 +127,7 @@ def start_log(log):
         datefmt='%m/%d/%Y %H:%M:%S')
     logging.info('program started')
     logging.info('command line: {0}'.format(' '.join(sys.argv)))
+
 
 def main():
     args = parse_args()
