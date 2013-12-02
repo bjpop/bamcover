@@ -113,7 +113,7 @@ def plot_coverage(coords, bams):
                 # the region of interest.
                 # fetch uses 0-based indexing. Our input coordinates are
                 # in 1-based coordinates.
-                reads = bam.fetch(chrom, start-1, end-11)
+                reads = bam.fetch(chrom, start-1, end-1)
                 # Insert the start and end of each aligned read into the
                 # interval tree.
                 for read in reads:
