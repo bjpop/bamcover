@@ -16,6 +16,7 @@ setup(
     description=('FIXME'),
     long_description=('FIXME'),
     install_requires=[
-        "pysam >= 0.7.5"
+        "pysam >= 0.7.8",
+        "bx-python >= 0.7.1"
     ],
 )
