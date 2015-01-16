@@ -17,6 +17,7 @@ setup(
     long_description=('FIXME'),
     install_requires=[
         "pysam >= 0.7.8",
-        "bx-python >= 0.7.1"
+        "bx-python >= 0.7.1",
+        "matplotlib >= 1.3.1"
     ],
 )
