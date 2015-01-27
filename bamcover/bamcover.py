@@ -42,7 +42,7 @@ VERSION = pkg_resources.require("bamcover")[0].version
 
 # The maximum number of characters to take from the prefix of an input BAM
 # file to use in the legend of the graph.
-MAX_BAM_PREFIX = 10
+MAX_BAM_PREFIX = 7
 
 # default name of log file if none is specified on the command line
 DEFAULT_LOG_FILE = "bamcover.log"
